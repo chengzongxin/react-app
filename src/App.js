@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Button, Typography, Card, Layout, Row, Col } from 'antd';
+import { List, Button, Typography, Layout, Row, Col } from 'antd';
 
 const { Title } = Typography;
-const { Header, Content, Footer } = Layout;
+const { Header, Content } = Layout;
 
 function App() {
   const [videos, setVideos] = useState([]);
@@ -30,36 +30,15 @@ function App() {
       <Header style={{ color: '#fff', textAlign: 'center', fontSize: '24px' }}>
         视频播放器
       </Header>
-      <Content style={{ padding: '20px' }}>
-        <div style={{ position: 'fixed', top: '60px', left: '50%', transform: 'translateX(-50%)', zIndex: 10, width: '80%' }}>
-          {selectedVideo && (
-            <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-              <Title level={3}>正在播放：</Title>
-              <video 
-                style={{ width: '100%', maxHeight: '400px', borderRadius: '8px', boxShadow: '0 2px 10px rgba(0,0,0,0.2)' }} 
-                controls 
-                ref={videoRef}
-              >
-                <source src={selectedVideo} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-            </div>
-          )}
-        </div>
-        <div style={{ marginTop: '480px' }}> {/* 留出播放器的空间 */}
-          <Title level={3} style={{ textAlign: 'center', marginBottom: '20px' }}>视频列表</Title>
-          <Row gutter={[16, 16]}>
-            {videos.map((video, index) => (
-              <Col span={3} key={index}>
-                <Card
-                  hoverable
-                  cover={
-                    <img
-                      alt={video}
-                      src={`http://192.168.10.111:5000/videos/thumbnail/${video}`} // 假设有缩略图
-                      style={{ height: '150px', objectFit: 'cover' }}
-                    />
-                  }
+      <Content style={{ padding: '0' }}>
+        <Row style={{ height: '100%' }}>
+          <Col span={8} style={{ padding: '20px', overflowY: 'auto', height: '100%' }}>
+            <Title level={3} style={{ textAlign: 'center', marginBottom: '20px' }}>视频列表</Title>
+            <List
+              bordered
+              dataSource={videos}
+              renderItem={(video) => (
+                <List.Item
                   actions={[
                     <Button 
                       type="primary" 
@@ -76,12 +55,31 @@ function App() {
                     </Button>
                   ]}
                 >
-                  <Card.Meta title={video} />
-                </Card>
-              </Col>
-            ))}
-          </Row>
-        </div>
+                  <List.Item.Meta 
+                    title={video} 
+                  />
+                </List.Item>
+              )}
+            />
+          </Col>
+          <Col span={16} style={{ position: 'relative', padding: '20px' }}>
+            {selectedVideo && (
+              <div style={{ position: 'fixed', top: '60px', right: '20px', zIndex: 10, width: '65%' }}>
+                <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+                  <Title level={3}>正在播放：{selectedVideo.split('/').pop()}</Title>
+                  <video 
+                    style={{ width: '100%', maxHeight: '80vh', borderRadius: '8px', boxShadow: '0 2px 10px rgba(0,0,0,0.2)' }} 
+                    controls 
+                    ref={videoRef}
+                  >
+                    <source src={selectedVideo} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              </div>
+            )}
+          </Col>
+        </Row>
       </Content>
     </Layout>
   );
