@@ -27,5 +27,5 @@ app.get('/api/videos', (req, res) => {
 // 启动服务器
 const port = 5000;
 app.listen(port, () => {
-  console.log(`服务器在 http://localhost:${port} 运行`);
+  console.log(`服务器在 http://192.168.10.111:${port} 运行`);
 });
